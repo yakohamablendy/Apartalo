@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apartalo - Sistema de Reservas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- ===== BARRA DE NAVEGACIÓN DINÁMICA ===== -->
+    <!-- Este contenedor será rellenado automáticamente por main.js -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="main-navbar">
+        <!-- El contenido (logo, enlaces, etc.) se generará aquí -->
+    </nav>
+    <!-- ======================================= -->
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-overlay">
+            <div class="container">
+                <div class="row min-vh-100 align-items-center">
+                    <div class="col-lg-6">
+                        <h1 class="display-3 fw-bold text-white mb-4">
+                            Bienvenido a <span class="text-warning">Apartalo</span>
+                        </h1>
+                        <p class="lead text-white-50 mb-4">
+                            Reserva tu mesa favorita en nuestro restaurante de manera fácil y rápida. 
+                            Experiencia gastronómica única te espera.
+                        </p>
+                        <div class="d-flex gap-3">
+                            <a href="pages/reservas.html" class="btn btn-warning btn-lg">
+                                <i class="fas fa-calendar-plus me-2"></i>Hacer Reserva
+                            </a>
+                            <a href="#features" class="btn btn-outline-light btn-lg">
+                                <i class="fas fa-info-circle me-2"></i>Más Información
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="text-center">
+                            <img src="img/restaurant-hero.jpg" alt="Restaurante Apartalo" class="img-fluid rounded shadow-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="display-4 fw-bold mb-3">¿Por qué elegir Apartalo?</h2>
+                    <p class="lead text-muted">
+                        Ofrecemos la mejor experiencia de reservas online con características únicas
+                    </p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-clock fa-3x text-warning"></i>
+                        </div>
+                        <h4 class="fw-bold">Reservas Rápidas</h4>
+                        <p class="text-muted">
+                            Reserva tu mesa en menos de 2 minutos con nuestro sistema optimizado
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-utensils fa-3x text-warning"></i>
+                        </div>
+                        <h4 class="fw-bold">Variedad de Mesas</h4>
+                        <p class="text-muted">
+                            Mesas para 2, 4, 6 y 8 personas. Encuentra la perfecta para tu ocasión
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-mobile-alt fa-3x text-warning"></i>
+                        </div>
+                        <h4 class="fw-bold">Gestión Fácil</h4>
+                        <p class="text-muted">
+                            Modifica o cancela tus reservas desde cualquier dispositivo
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row text-center g-4">
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <h3 class="display-4 fw-bold text-warning">8</h3>
+                        <p class="text-muted">Mesas Disponibles</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <h3 class="display-4 fw-bold text-warning">24/7</h3>
+                        <p class="text-muted">Sistema Online</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <h3 class="display-4 fw-bold text-warning">100%</h3>
+                        <p class="text-muted">Reservas Seguras</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <h3 class="display-4 fw-bold text-warning">5★</h3>
+                        <p class="text-muted">Experiencia Premium</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2025 Apartalo - Sistema de Reservas. Todos los derechos reservados.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <!-- Este script contiene la lógica que rellenará la barra de navegación de arriba -->
+    <script src="js/main.js"></script>
+</body>
+</html>

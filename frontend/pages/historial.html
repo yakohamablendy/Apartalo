@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Reservas - Apartalo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="main-navbar"></nav>
+
+    <!-- Contenido Principal -->
+    <main class="py-5 bg-light">
+        <div class="container mt-5">
+            <div id="alert-container"></div>
+            <div class="row">
+                <div class="col-12">
+                    <!-- Header Usuario -->
+                    <div class="card mb-4 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-warning rounded-circle p-3 me-3 d-flex align-items-center justify-content-center user-icon-circle">
+                                    <i class="fas fa-user text-white fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h3 class="mb-1" id="userName">Cargando...</h3>
+                                    <p class="text-muted mb-0" id="userEmail">Cargando email...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mis Reservas -->
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white py-3 border-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0">
+                                    <i class="fas fa-calendar-alt me-2 text-warning"></i>
+                                    Mis Reservas
+                                </h4>
+                                <a href="reservas.html" class="btn btn-warning">
+                                    <i class="fas fa-plus me-1"></i>Nueva Reserva
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- Loading -->
+                            <div id="loadingReservas" class="text-center py-4">
+                                <div class="spinner-border text-warning" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                                <p class="mt-2 text-muted">Buscando tus reservas...</p>
+                            </div>
+
+                            <!-- Sin Reservas -->
+                            <div id="sinReservas" class="text-center py-5 d-none">
+                                <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                                <h5>No tienes reservas aún</h5>
+                                <p class="text-muted">¡Haz tu primera reserva y disfruta de una experiencia única!</p>
+                            </div>
+
+                            <!-- Lista de Reservas -->
+                            <div id="listaReservas" class="mt-3 d-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para Confirmar Cancelación -->
+    <div class="modal fade" id="modalCancelar" tabindex="-1" aria-labelledby="modalCancelarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCancelarLabel">
+                        <i class="fas fa-exclamation-triangle text-danger me-2"></i>Confirmar Cancelación
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas cancelar esta reserva? Esta acción no se puede deshacer.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, mantener</button>
+                    <button type="button" class="btn btn-danger" id="btnConfirmarCancelacion">
+                        <i class="fas fa-trash-alt me-1"></i>Sí, cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-auto">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2025 Apartalo. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/historial.js"></script>
+</body>
+</html>

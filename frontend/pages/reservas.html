@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservar Mesa - Apartalo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    
+    <!-- ESTILOS RESTAURADOS COMO TE GUSTABAN -->
+    <style>
+        .step-indicator { display: flex; justify-content: space-between; margin-bottom: 30px; }
+        .step { flex: 1; text-align: center; padding: 10px; border-bottom: 3px solid #e9ecef; position: relative; }
+        .step.active { border-bottom-color: #ffc107; color: #ffc107; font-weight: bold; }
+        .step.completed { border-bottom-color: #198754; color: #198754; }
+        .time-slot { border: 2px solid #e9ecef; border-radius: 10px; padding: 15px; margin: 5px; cursor: pointer; transition: all 0.3s ease; text-align: center; }
+        .time-slot:hover { border-color: #ffc107; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .time-slot.selected { background: #ffc107; color: white; border-color: #ffc107; }
+        .time-slot.unavailable { background: #f8f9fa; color: #6c757d; cursor: not-allowed; opacity: 0.6; }
+        .mesa-card { background: white; border: 2px solid #e9ecef; border-radius: 15px; padding: 20px; margin: 10px; cursor: pointer; transition: all 0.3s ease; text-align: center; }
+        .mesa-card:hover { border-color: #ffc107; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .mesa-card.selected { background: #ffc107; color: white; border-color: #ffc107; }
+        .mesa-card.ocupada { background: #f8f9fa; color: #6c757d; cursor: not-allowed; opacity: 0.6; }
+        .mesa-icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .reservation-summary { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <!-- Navbar (se cargará dinámicamente) -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="main-navbar"></nav>
+
+    <!-- Contenido Principal -->
+    <main class="py-5 bg-light">
+        <div class="container mt-5">
+             <div id="alert-container"></div>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-body p-4 p-md-5">
+                            <div class="text-center mb-4">
+                                <h1 class="fw-bold">Reservar una Mesa</h1>
+                                <p class="text-muted">Completa los 3 pasos para asegurar tu lugar.</p>
+                            </div>
+
+                            <div class="step-indicator">
+                                <div class="step" id="step1"><i class="fas fa-calendar-alt d-block mb-1"></i>Fecha y Hora</div>
+                                <div class="step" id="step2"><i class="fas fa-chair d-block mb-1"></i>Seleccionar Mesa</div>
+                                <div class="step" id="step3"><i class="fas fa-user-check d-block mb-1"></i>Confirmar Datos</div>
+                            </div>
+
+                            <!-- Paso 1: Fecha, Hora, Personas -->
+                            <div class="step-content" id="stepContent1">
+                                <div class="bg-light p-4 rounded mb-4">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="fechaReserva" class="form-label fw-bold">Fecha</label>
+                                            <input type="date" class="form-control" id="fechaReserva">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="numeroPersonas" class="form-label fw-bold">Número de Personas</label>
+                                            <select class="form-select" id="numeroPersonas">
+                                                <option value="">Selecciona...</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8+</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 class="mt-4">Horarios Disponibles</h5>
+                                <div class="d-flex flex-wrap" id="timeSlots"></div>
+                                <div class="text-center mt-4"><button class="btn btn-warning btn-lg" id="nextToTables" disabled>Siguiente <i class="fas fa-arrow-right"></i></button></div>
+                            </div>
+
+                            <!-- Paso 2: Selección de Mesa -->
+                            <div class="step-content d-none" id="stepContent2">
+                                <h4 class="mb-3">Mesas Disponibles</h4>
+                                <div class="row" id="mesasContainer"></div>
+                                <div class="d-flex justify-content-center mt-4"><button class="btn btn-secondary me-3" id="backToDateTime"><i class="fas fa-arrow-left"></i> Anterior</button><button class="btn btn-warning btn-lg" id="nextToForm" disabled>Siguiente <i class="fas fa-arrow-right"></i></button></div>
+                            </div>
+
+                            <!-- Paso 3: Formulario de Reserva -->
+                            <div class="step-content d-none" id="stepContent3">
+                                <div class="reservation-summary mb-4"><h5><i class="fas fa-clipboard-list me-2"></i>Resumen de tu Reserva</h5><div class="row"><div class="col-md-6"><p><strong>Fecha:</strong> <span id="summaryFecha"></span></p><p><strong>Hora:</strong> <span id="summaryHora"></span></p></div><div class="col-md-6"><p><strong>Mesa:</strong> <span id="summaryMesa"></span></p><p><strong>Personas:</strong> <span id="summaryPersonas"></span></p></div></div></div>
+                                <form id="reservationForm">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="nombreCompleto" class="form-label">Nombre</label>
+                                            <input type="text" class="form-control" id="nombreCompleto" readonly>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="telefono" class="form-label">Teléfono</label>
+                                            <input type="tel" class="form-control" id="telefono" readonly>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="email" readonly>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="comentarios" class="form-label">Comentarios (opcional)</label>
+                                            <textarea class="form-control" id="comentarios" rows="3" placeholder="Ej: alergias, celebración..."></textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="d-flex justify-content-center mt-4"><button class="btn btn-secondary me-3" id="backToTables"><i class="fas fa-arrow-left"></i> Anterior</button><button class="btn btn-success btn-lg" id="confirmarReserva"><i class="fas fa-check"></i> Confirmar Reserva</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white py-4 mt-auto">
+        <div class="container text-center"><p class="mb-0">&copy; 2025 Apartalo. Todos los derechos reservados.</p></div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/reservas.js"></script>
+</body>
+</html>
