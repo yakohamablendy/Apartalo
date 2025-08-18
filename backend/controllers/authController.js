@@ -78,23 +78,18 @@ const verifyToken = (req, res, next) => {
     }
 };
 
-// --- NUEVA FUNCIÓN 'GUARDIÁN' ---
-// Middleware para verificar si el usuario es Admin
 const isAdmin = (req, res, next) => {
-    // Revisa el 'pasaporte' (req.user) que 'verifyToken' ya preparó.
-    // Si el rol es 'admin', permite continuar con la siguiente función.
+ 
     if (req.user && req.user.rol === 'admin') {
         next();
     } else {
-        // Si no es 'admin', lo bloquea con un error de "Acceso Prohibido".
         res.status(403).json({ message: 'Acceso denegado. Se requiere rol de administrador.' });
     }
 };
 
-// Exportamos todas las funciones, incluyendo la nueva
 module.exports = { 
     register, 
     login, 
     verifyToken,
-    isAdmin // <-- Se exporta el guardián
+    isAdmin 
 };

@@ -3,7 +3,7 @@
 const db = require('../config/database');
 
 /**
- * @desc    Crear una nueva reserva
+ * @desc    
  */
 const crearReserva = (req, res) => {
     const { mesa_id, fecha, hora, personas } = req.body;
@@ -13,10 +13,9 @@ const crearReserva = (req, res) => {
         return res.status(400).json({ message: 'Todos los campos son requeridos.' });
     }
 
-    // Usando los nombres de columna EXACTOS de tu tabla 'reservas'
     const query = 'INSERT INTO reservas (usuario_id, mesa_id, fecha, hora, personas, estado) VALUES (?, ?, ?, ?, ?, ?)';
     
-    const values = [usuario_id, mesa_id, fecha, hora, personas, 'confirmada']; // 'confirmada' en minúscula como en tu enum
+    const values = [usuario_id, mesa_id, fecha, hora, personas, 'confirmada']; 
 
     db.query(query, values, (err, result) => {
         if (err) {
@@ -28,12 +27,12 @@ const crearReserva = (req, res) => {
 };
 
 /**
- * @desc    Obtener el historial de reservas de un usuario
+ * @desc   
  */
 const getReservasUsuario = (req, res) => {
     const usuario_id = req.user.id; 
 
-    // Usando los nombres de columna EXACTOS de tus tablas 'reservas' y 'mesas'
+
     const query = `
         SELECT 
             r.id, 
@@ -58,13 +57,13 @@ const getReservasUsuario = (req, res) => {
 };
 
 /**
- * @desc    Cancelar una reserva
+ * @desc   
  */
 const cancelarReserva = (req, res) => {
     const reserva_id = req.params.id;
     const usuario_id = req.user.id;
 
-    // Usando 'cancelada' en minúscula para que coincida con tu enum
+    
     const query = "UPDATE reservas SET estado = 'cancelada' WHERE id = ? AND usuario_id = ?";
 
     db.query(query, [reserva_id, usuario_id], (err, result) => {

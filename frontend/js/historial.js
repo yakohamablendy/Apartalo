@@ -41,15 +41,15 @@ async function cargarReservasUsuario() {
     const container = document.getElementById('listaReservas');
     
     loadingDiv.style.display = 'block';
-    sinReservasDiv.classList.add('d-none'); // Usar clase
-    container.classList.add('d-none');    // Usar clase
+    sinReservasDiv.classList.add('d-none'); 
+    container.classList.add('d-none');    
 
     try {
         const reservas = await window.apartalo.makeRequest(`/reservas/usuario/${user.id}`);
         mostrarReservas(reservas);
     } catch (error) {
         loadingDiv.style.display = 'none';
-        sinReservasDiv.classList.remove('d-none'); // Usar clase
+        sinReservasDiv.classList.remove('d-none'); 
         window.apartalo.showAlert(error.message || 'No se pudieron cargar las reservas.', 'danger');
     }
 }
@@ -63,8 +63,8 @@ function mostrarReservas(reservas) {
     
     // ===== INICIO DE LA CORRECCIÓN =====
     if (!reservas || reservas.length === 0) {
-        sinReservasDiv.classList.remove('d-none'); // Quita 'd-none' para MOSTRAR el mensaje
-        container.classList.add('d-none');         // Añade 'd-none' para OCULTAR el contenedor de la lista
+        sinReservasDiv.classList.remove('d-none'); 
+        container.classList.add('d-none');         
         return;
     }
 
@@ -72,7 +72,6 @@ function mostrarReservas(reservas) {
 
     reservas.forEach(reserva => {
         const fechaObjeto = new Date(reserva.fecha);
-        // Ajustar por la zona horaria para evitar que la fecha cambie
         const fechaUtc = new Date(fechaObjeto.getTime() + fechaObjeto.getTimezoneOffset() * 60000);
 
         const fechaFormateada = fechaUtc.toLocaleDateString('es-ES', {
@@ -117,8 +116,8 @@ function mostrarReservas(reservas) {
         container.innerHTML += reservaHTML;
     });
 
-    container.classList.remove('d-none');     // Quita 'd-none' para MOSTRAR el contenedor de la lista
-    sinReservasDiv.classList.add('d-none');   // Añade 'd-none' para OCULTAR el mensaje de "sin reservas"
+    container.classList.remove('d-none');     
+    sinReservasDiv.classList.add('d-none');   
     // ===== FIN DE LA CORRECIÓN =====
 }
 
@@ -136,7 +135,7 @@ async function confirmarCancelacion() {
 
     try {
         const response = await window.apartalo.makeRequest(`/reservas/${reservaId}`, {
-            method: 'DELETE' // Debería ser 'DELETE' para cancelar, como en tu backend
+            method: 'DELETE' 
         });
         
         window.apartalo.showAlert(response.message, 'success');

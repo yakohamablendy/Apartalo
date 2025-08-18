@@ -2,9 +2,9 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const path = require('path');
-const db = require('./config/database'); // Importamos la conexión
+const db = require('./config/database'); 
 
-// Cargar variables de entorno
+
 dotenv.config();
 
 const app = express();
@@ -27,22 +27,19 @@ app.use('/api/reservas', reservasRoutes);
 const adminRoutes = require('./routes/admin');
 app.use('/api/admin', adminRoutes);
 
-// Servir archivos estáticos del frontend
+
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// Ruta principal para servir index.html
 app.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../frontend', 'index.html'));
 });
 
-// Iniciar el servidor
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
     
-    // --- MÉTODO DE VERIFICACIÓN DE CONEXIÓN CORREGIDO ---
-    // Hacemos una consulta simple para probar la conexión.
+    
     db.query('SELECT 1', (err, results) => {
         if (err) {
             console.error('Error al conectar con MySQL:', err.stack);

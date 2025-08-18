@@ -1,4 +1,4 @@
-// ===== CLASE PRINCIPAL DE LA APLICACIÓN (VERSIÓN FINAL Y ROBUSTA) =====
+
 class ApartaloApp {
     constructor() {
         // Nombres estandarizados para localStorage
@@ -11,7 +11,7 @@ class ApartaloApp {
         
         this.API_URL = 'http://localhost:3000/api';
         
-        // Esperar a que el HTML esté listo antes de ejecutar cualquier lógica del DOM
+
         document.addEventListener('DOMContentLoaded', () => this.initNavbar());
     }
 
@@ -48,7 +48,6 @@ class ApartaloApp {
         localStorage.setItem(this.USER_KEY, JSON.stringify(userData));
         this.token = token;
         this.user = userData;
-        // Forzar la actualización de la barra de navegación después de iniciar sesión
         this.initNavbar(); 
     }
 
@@ -110,7 +109,7 @@ class ApartaloApp {
     }
 }
 
-// Inicializar la aplicación de forma segura
+
 if (window) {
     window.apartalo = new ApartaloApp();
 }
