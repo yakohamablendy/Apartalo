@@ -1,4 +1,4 @@
-// tests/admin.test.js
+
 
 const { Builder, By, until } = require('selenium-webdriver');
 const { Options } = require('selenium-webdriver/chrome');
@@ -11,9 +11,9 @@ describe('Flujo del Administrador', () => {
     beforeAll(async () => {
         console.log('[Admin Test] - Iniciando el hook beforeAll...');
 
-        // El modo headless está comentado para que puedas ver el navegador.
+        
         const chromeOptions = new Options()
-            // .addArguments('--headless') // <--- LÍNEA MODIFICADA
+            // .addArguments('--headless') // 
             .addArguments('--disable-gpu')
             .addArguments('--window-size=1920,1080');
 
