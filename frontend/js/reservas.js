@@ -1,4 +1,4 @@
-// ===== RESERVAS.JS - LÓGICA DEL SISTEMA DE RESERVAS (CORREGIDO) =====
+// frontend/js/reservas.js
 
 document.addEventListener('DOMContentLoaded', () => {
     if (!window.apartalo.isAuthenticated()) {
@@ -8,25 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const reserva = { fecha: null, hora: null, personas: null, mesa: null };
 
-    const steps = {
-        step1: document.getElementById('step1'), step2: document.getElementById('step2'), step3: document.getElementById('step3'),
-    };
-    const contents = {
-        content1: document.getElementById('stepContent1'), content2: document.getElementById('stepContent2'), content3: document.getElementById('stepContent3'),
-    };
-    const inputs = {
-        fecha: document.getElementById('fechaReserva'), personas: document.getElementById('numeroPersonas'),
-        nombre: document.getElementById('nombreCompleto'), telefono: document.getElementById('telefono'),
-        email: document.getElementById('email'), comentarios: document.getElementById('comentarios'),
-    };
-    const containers = {
-        timeSlots: document.getElementById('timeSlots'), mesas: document.getElementById('mesasContainer'),
-    };
-    const buttons = {
-        nextToTables: document.getElementById('nextToTables'), nextToForm: document.getElementById('nextToForm'),
-        backToDateTime: document.getElementById('backToDateTime'), backToTables: document.getElementById('backToTables'),
-        confirmar: document.getElementById('confirmarReserva'),
-    };
+    const steps = { step1: document.getElementById('step1'), step2: document.getElementById('step2'), step3: document.getElementById('step3') };
+    const contents = { content1: document.getElementById('stepContent1'), content2: document.getElementById('stepContent2'), content3: document.getElementById('stepContent3') };
+    const inputs = { fecha: document.getElementById('fechaReserva'), personas: document.getElementById('numeroPersonas'), nombre: document.getElementById('nombreCompleto'), telefono: document.getElementById('telefono'), email: document.getElementById('email'), comentarios: document.getElementById('comentarios') };
+    const containers = { timeSlots: document.getElementById('timeSlots'), mesas: document.getElementById('mesasContainer') };
+    const buttons = { nextToTables: document.getElementById('nextToTables'), nextToForm: document.getElementById('nextToForm'), backToDateTime: document.getElementById('backToDateTime'), backToTables: document.getElementById('backToTables'), confirmar: document.getElementById('confirmarReserva') };
 
     function init() {
         setMinDate();
@@ -46,8 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function generateTimeSlots() {
         const slots = ['18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00'];
-        containers.timeSlots.innerHTML = slots.map(time => `
-            <div class="time-slot" data-time="${time}"><strong>${time}</strong></div>`).join('');
+        containers.timeSlots.innerHTML = slots.map(time => `<div class="time-slot" data-time="${time}"><strong>${time}</strong></div>`).join('');
     }
     
     function cargarDatosUsuario() {
@@ -108,26 +93,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function cargarMesasDisponibles() {
-        window.apartalo.showLoading(true);
-        const url = `/mesas/disponibles?fecha=${reserva.fecha}&hora=${reserva.hora}&capacidad=${reserva.personas}`;
+        containers.mesas.innerHTML = '<div class="col-12 text-center"><div class="spinner-border text-warning" role="status"><span class="visually-hidden">Cargando...</span></div></div>';
+        const url = `/mesas/disponibles?fecha=${reserva.fecha}&hora=${reserva.hora}:00&capacidad=${reserva.personas}`;
         try {
             const mesas = await window.apartalo.makeRequest(url);
             renderizarMesas(mesas);
         } catch (error) {
             window.apartalo.showAlert(error.message || 'No se pudieron cargar las mesas.', 'danger');
             containers.mesas.innerHTML = `<div class="col-12"><p class="text-center text-danger">${error.message}</p></div>`;
-        } finally {
-            window.apartalo.showLoading(false);
         }
     }
 
     function renderizarMesas(mesas) {
-        if (!Array.isArray(mesas)) {
-            console.error("Error: la respuesta del servidor no es una lista de mesas.", mesas);
-            containers.mesas.innerHTML = `<div class="col-12"><p class="text-center text-danger">Hubo un problema al procesar la respuesta del servidor.</p></div>`;
-            return;
-        }
-        if (mesas.length === 0) {
+        if (!Array.isArray(mesas) || mesas.length === 0) {
             containers.mesas.innerHTML = `<div class="col-12"><p class="text-center text-muted">No hay mesas disponibles que cumplan con tus criterios.</p></div>`;
             return;
         }
@@ -136,43 +114,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="mesa-card" data-mesa='${JSON.stringify(mesa)}'>
                     <div class="mesa-icon"><i class="fas fa-chair"></i></div>
                     <h5>Mesa ${mesa.numero}</h5>
-                    <p class="mb-1 text-muted"><i class="fas fa-users"></i> ${mesa.capacidad} personas</p>
-                    <p class="mb-0 text-muted"><i class="fas fa-map-marker-alt"></i> ${mesa.ubicacion}</p>
+                    <p class="mb-1 text-muted"><i class="fas fa-users"></i> Para ${mesa.capacidad} personas</p>
                 </div>
             </div>`).join('');
     }
 
     function actualizarResumen() {
-        const fechaObj = new Date(reserva.fecha + 'T00:00:00');
-        document.getElementById('summaryFecha').textContent = fechaObj.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        const fechaObj = new Date(reserva.fecha);
+        const fechaUtc = new Date(fechaObj.getTime() + fechaObj.getTimezoneOffset() * 60000);
+        document.getElementById('summaryFecha').textContent = fechaUtc.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         document.getElementById('summaryHora').textContent = reserva.hora;
-        document.getElementById('summaryMesa').textContent = `Mesa ${reserva.mesa.numero} (${reserva.mesa.ubicacion})`;
+        document.getElementById('summaryMesa').textContent = `Mesa ${reserva.mesa.numero}`;
         document.getElementById('summaryPersonas').textContent = `${reserva.personas} personas`;
     }
 
     async function confirmarReserva() {
-        // --- CORRECCIÓN CLAVE AQUÍ ---
-        // Nos aseguramos de que los nombres de los campos coincidan con lo que el backend espera.
         const reservaData = {
-            mesa_id: reserva.mesa.id,      // Nombre corregido
-            fecha: reserva.fecha,         // Nombre corregido
-            hora: reserva.hora,           // Nombre corregido
-            personas: reserva.personas,   // Nombre corregido
-            comentarios: inputs.comentarios.value.trim()
+            mesa_id: reserva.mesa.id,
+            fecha: reserva.fecha,
+            hora: `${reserva.hora}:00`,
+            personas: reserva.personas,
         };
-
-        window.apartalo.showLoading(true);
         try {
             const response = await window.apartalo.makeRequest('/reservas', {
                 method: 'POST',
                 body: JSON.stringify(reservaData)
             });
             window.apartalo.showAlert(response.message || "Reserva creada con éxito", 'success');
-            setTimeout(() => window.location.href = 'historial.html', 2500);
+            setTimeout(() => window.location.href = 'historial.html', 2000);
         } catch (error) {
             window.apartalo.showAlert(error.message || 'Ocurrió un error al confirmar la reserva.', 'danger');
-        } finally {
-            window.apartalo.showLoading(false);
         }
     }
 

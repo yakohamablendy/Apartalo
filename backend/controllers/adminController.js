@@ -1,13 +1,11 @@
 const db = require('../config/database');
 
 /**
- * @desc    Admin: Obtener todas las reservas de todos los usuarios
- * @route   GET /api/admin/reservas
- * @access  Admin
+ * @desc    
+ * @route   
+ * @access  
  */
 const getAllReservas = (req, res) => {
-    // Esta consulta es más compleja: une la tabla de reservas con la de usuarios y mesas
-    // para poder mostrar el nombre del cliente y el número de la mesa, no solo los IDs.
     const query = `
         SELECT 
             r.id, 
@@ -34,15 +32,14 @@ const getAllReservas = (req, res) => {
 };
 
 /**
- * @desc    Admin: Actualizar el estado de una reserva
- * @route   PUT /api/admin/reservas/:id/estado
- * @access  Admin
+ * @desc    
+ * @route   
+ * @access  
  */
 const updateReservaStatus = (req, res) => {
     const reservaId = req.params.id;
     const { estado } = req.body;
 
-    // Validación simple para asegurar que se envió un estado
     if (!estado) {
         return res.status(400).json({ message: "El nuevo estado es requerido." });
     }
@@ -55,7 +52,6 @@ const updateReservaStatus = (req, res) => {
             return res.status(500).json({ message: "Error en el servidor al actualizar la reserva." });
         }
         if (result.affectedRows === 0) {
-            // Esto pasa si el ID de la reserva no existe
             return res.status(404).json({ message: "Reserva no encontrada." });
         }
         res.json({ message: "Estado de la reserva actualizado exitosamente." });

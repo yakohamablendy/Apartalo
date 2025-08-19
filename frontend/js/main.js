@@ -1,4 +1,3 @@
-// ===== CLASE PRINCIPAL DE LA APLICACIÓN (VERSIÓN FINAL Y ROBUSTA) =====
 class ApartaloApp {
     constructor() {
         // Nombres estandarizados para localStorage
@@ -11,7 +10,6 @@ class ApartaloApp {
         
         this.API_URL = 'http://localhost:3000/api';
         
-        // Esperar a que el HTML esté listo antes de ejecutar cualquier lógica del DOM
         document.addEventListener('DOMContentLoaded', () => this.initNavbar());
     }
 
@@ -48,7 +46,6 @@ class ApartaloApp {
         localStorage.setItem(this.USER_KEY, JSON.stringify(userData));
         this.token = token;
         this.user = userData;
-        // Forzar la actualización de la barra de navegación después de iniciar sesión
         this.initNavbar(); 
     }
 
@@ -87,6 +84,36 @@ class ApartaloApp {
         }
     }
     
+    // --- NUEVAS FUNCIONES AÑADIDAS ---
+    showLoading(show) {
+        const loadingId = 'loading-overlay';
+        let overlay = document.getElementById(loadingId);
+
+        if (show) {
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.id = loadingId;
+                overlay.style.position = 'fixed';
+                overlay.style.top = '0';
+                overlay.style.left = '0';
+                overlay.style.width = '100%';
+                overlay.style.height = '100%';
+                overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+                overlay.style.display = 'flex';
+                overlay.style.justifyContent = 'center';
+                overlay.style.alignItems = 'center';
+                overlay.style.zIndex = '9999';
+                overlay.innerHTML = `<div class="spinner-border text-warning" role="status" style="width: 3rem; height: 3rem;"><span class="visually-hidden">Loading...</span></div>`;
+                document.body.appendChild(overlay);
+            }
+        } else {
+            if (overlay) {
+                overlay.remove();
+            }
+        }
+    }
+    // --- FIN DE LAS FUNCIONES AÑADIDAS ---
+
     initNavbar() {
         const navbarContainer = document.getElementById('main-navbar');
         if (!navbarContainer) return;
@@ -110,7 +137,7 @@ class ApartaloApp {
     }
 }
 
-// Inicializar la aplicación de forma segura
+
 if (window) {
     window.apartalo = new ApartaloApp();
 }

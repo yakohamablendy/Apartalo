@@ -1,4 +1,3 @@
-// ===== REGISTRO.JS - FUNCIONALIDAD DE REGISTRO =====
 document.addEventListener('DOMContentLoaded', () => {
     // Verificar si ya está logueado
     if (window.apartalo && window.apartalo.token) {
@@ -18,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const togglePassword = document.getElementById('toggle-password');
     const toggleConfirmPassword = document.getElementById('toggle-confirm-password');
 
-    // Toggle password visibility
+    
     togglePassword.addEventListener('click', () => {
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
@@ -33,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
     });
 
-    // Real-time password matching
+    
     confirmPasswordInput.addEventListener('input', () => {
         if (confirmPasswordInput.value && passwordInput.value !== confirmPasswordInput.value) {
             confirmPasswordInput.setCustomValidity('Las contraseñas no coinciden');
@@ -50,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Format phone number input
+   
     telefonoInput.addEventListener('input', (e) => {
         let value = e.target.value.replace(/\D/g, '');
         if (value.length >= 6) {
@@ -61,13 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.value = value;
     });
 
-    // Form submission
+    
     registroForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         await handleRegistro();
     });
 
-    // ===== FUNCIÓN PRINCIPAL DE REGISTRO (ARREGLADA) =====
+    
     async function handleRegistro() {
         const formData = {
             nombre: nombreInput.value.trim(),
@@ -77,11 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
             confirmPassword: confirmPasswordInput.value
         };
 
-        // Reset validation
+        
         registroForm.classList.remove('was-validated');
         clearValidationErrors();
 
-        // Validate form
+        
         let isValid = validateForm(formData);
 
         if (!isValid) {
@@ -89,13 +88,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Disable button and show loading
+       
         registroBtn.disabled = true;
         registroBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Creando cuenta...';
         window.apartalo.showLoading(true);
 
         try {
-            // ✅ ARREGLADO: Enviar como UN OBJETO, no parámetros separados
             const userData = {
                 nombre: formData.nombre,
                 email: formData.email,
@@ -132,39 +130,39 @@ document.addEventListener('DOMContentLoaded', () => {
     function validateForm(data) {
         let isValid = true;
 
-        // Validate nombre
+       
         if (!window.apartalo.validateRequired(data.nombre) || data.nombre.length < 2) {
             nombreInput.classList.add('is-invalid');
             isValid = false;
         }
 
-        // Validate telefono
+       
         const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
         if (!phoneRegex.test(data.telefono)) {
             telefonoInput.classList.add('is-invalid');
             isValid = false;
         }
 
-        // Validate email
+        
         if (!window.apartalo.validateEmail(data.email)) {
             emailInput.classList.add('is-invalid');
             isValid = false;
         }
 
-        // Validate password
+        
         if (!window.apartalo.validateRequired(data.password) || data.password.length < 6) {
             passwordInput.classList.add('is-invalid');
             isValid = false;
         }
 
-        // Validate password match
+       
         if (data.password !== data.confirmPassword) {
             confirmPasswordInput.classList.add('is-invalid');
             confirmPasswordInput.setCustomValidity('Las contraseñas no coinciden');
             isValid = false;
         }
 
-        // Validate terms
+        
         if (!termsInput.checked) {
             termsInput.classList.add('is-invalid');
             isValid = false;
@@ -178,6 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .forEach(input => input.classList.remove('is-invalid'));
     }
 
-    // Auto-focus on first input
+   
     nombreInput.focus();
 });

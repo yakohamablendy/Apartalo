@@ -1,4 +1,4 @@
-// ===== ADMIN.JS - LÓGICA DEL PANEL DE ADMINISTRACIÓN =====
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const user = window.apartalo.getUser();
