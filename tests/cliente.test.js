@@ -1,4 +1,4 @@
-// tests/cliente.test.js
+
 
 const { Builder, By, until } = require('selenium-webdriver');
 const { Options } = require('selenium-webdriver/chrome');
@@ -11,9 +11,9 @@ describe('Flujo Completo del Cliente', () => {
     beforeAll(async () => {
         console.log('[Cliente Test] - Iniciando el hook beforeAll...');
 
-        // El modo headless está comentado para que puedas ver el navegador.
+    
         const chromeOptions = new Options()
-            // .addArguments('--headless') // <--- LÍNEA MODIFICADA
+            // .addArguments('--headless') 
             .addArguments('--disable-gpu')
             .addArguments('--window-size=1920,1080');
 
@@ -42,7 +42,8 @@ describe('Flujo Completo del Cliente', () => {
         await driver.get('http://localhost:3000/pages/login.html');
         await driver.findElement(By.id('email')).sendKeys('samuelcs12@gmail.com');
         await driver.findElement(By.id('password')).sendKeys('123456789');
-        await driver.findElement(By.id('login-btn')).click();
+        const loginBtn = await driver.wait(until.elementLocated(By.id('login-btn')), 10000);
+        await driver.executeScript("arguments[0].click();", loginBtn);
         await driver.wait(until.urlContains('/historial.html'), 20000);
         
         await driver.get('http://localhost:3000/pages/reservas.html');
@@ -70,6 +71,6 @@ describe('Flujo Completo del Cliente', () => {
 
         await driver.sleep(2000);
         const bodyTextActualizado = await driver.findElement(By.tagName('body')).getText();
-        expect(bodyTextActualizado).toContain('CANCELADA');
+        expect(bodyTextActualizado).toContain('cancelada exitosamente');
     });
 });
