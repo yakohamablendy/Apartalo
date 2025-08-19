@@ -1,4 +1,3 @@
-// backend/controllers/mesasController.js
 
 const db = require('../config/database');
 

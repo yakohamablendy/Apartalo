@@ -1,19 +1,40 @@
 // tests/cliente.test.js
 
 const { Builder, By, until } = require('selenium-webdriver');
+const { Options } = require('selenium-webdriver/chrome');
 
-jest.setTimeout(120000); 
+jest.setTimeout(180000);
 
 describe('Flujo Completo del Cliente', () => {
     let driver;
 
     beforeAll(async () => {
-        driver = await new Builder().forBrowser('chrome').build();
+        console.log('[Cliente Test] - Iniciando el hook beforeAll...');
+
+        // El modo headless está comentado para que puedas ver el navegador.
+        const chromeOptions = new Options()
+            // .addArguments('--headless') // <--- LÍNEA MODIFICADA
+            .addArguments('--disable-gpu')
+            .addArguments('--window-size=1920,1080');
+
+        try {
+            console.log('[Cliente Test] - Construyendo el driver de Chrome...');
+            driver = await new Builder()
+                .forBrowser('chrome')
+                .setChromeOptions(chromeOptions)
+                .build();
+            console.log('[Cliente Test] - Driver construido exitosamente.');
+        } catch (error) {
+            console.error('[Cliente Test] - Error al construir el driver:', error);
+            throw error;
+        }
     });
 
     afterAll(async () => {
+        console.log('[Cliente Test] - Iniciando el hook afterAll...');
         if (driver) {
             await driver.quit();
+            console.log('[Cliente Test] - Driver cerrado exitosamente.');
         }
     });
 

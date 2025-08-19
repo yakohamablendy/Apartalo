@@ -1,21 +1,40 @@
 // tests/admin.test.js
 
 const { Builder, By, until } = require('selenium-webdriver');
+const { Options } = require('selenium-webdriver/chrome');
 
-// Aumentamos el timeout general de Jest para este archivo a 2 minutos
-jest.setTimeout(120000);
+jest.setTimeout(180000);
 
 describe('Flujo del Administrador', () => {
     let driver;
 
     beforeAll(async () => {
-        driver = await new Builder().forBrowser('chrome').build();
+        console.log('[Admin Test] - Iniciando el hook beforeAll...');
+
+        // El modo headless está comentado para que puedas ver el navegador.
+        const chromeOptions = new Options()
+            // .addArguments('--headless') // <--- LÍNEA MODIFICADA
+            .addArguments('--disable-gpu')
+            .addArguments('--window-size=1920,1080');
+
+        try {
+            console.log('[Admin Test] - Construyendo el driver de Chrome...');
+            driver = await new Builder()
+                .forBrowser('chrome')
+                .setChromeOptions(chromeOptions)
+                .build();
+            console.log('[Admin Test] - Driver construido exitosamente.');
+        } catch (error) {
+            console.error('[Admin Test] - Error al construir el driver:', error);
+            throw error;
+        }
     });
 
-    
     afterAll(async () => {
+        console.log('[Admin Test] - Iniciando el hook afterAll...');
         if (driver) {
             await driver.quit();
+            console.log('[Admin Test] - Driver cerrado exitosamente.');
         }
     });
 

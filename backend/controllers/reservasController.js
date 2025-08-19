@@ -1,4 +1,3 @@
-// backend/controllers/reservasController.js
 
 const db = require('../config/database');
 
